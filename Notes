@@ -66,3 +66,237 @@ Node.js, accept arguments from the command line
 	-Arguments can be standalone or key-value pairs:
 		$ node app.js joe
 		$ node app.js name==joepr
+
+-----------------------------------------------------------------------
+06-Sep-2021
+
+Terminating a process in NodeJS
+
+	-The process core module provides a handy method that allows you to programmatically exit from a Node.js program: process.exit().
+	- The process core module doesnot require a require its automatically avialable.
+	- NodeJS when runs this line the process is immidiately forced to terminate.
+
+Reading environment variables from NodeJS:
+	-The process core module of Node.js provides the env property which hosts all the environment variables that were set at the moment the process was started.
+	-Below code runs app.js and set USER_ID and USER_KEY 
+		USER_ID=239482 USER_KEY=foobar node app.js
+	-A .env file also can be created incase we have to use mant environment variables, This file can be required as require('dotenv').config();
+
+REPL Mode in NodeJS:
+	-Using REPL (Read Evaluate Print Loop), to get into REPL mode simply type "node" on the terminal
+	-REPL is an interactive programming language  envoronment that takes a single expression as input and returns the result back to the console after execution.
+	-Exploring JS Objects and Global Objects:
+		1. Type any object in JS followed by a dot. The press tab, it will list all the methods/functions.
+		2. All global objects can ve accessed by typing 'global.' and then pressing tab.
+
+	-The special variable (_), entering _ in the node console prints out the result of the last expression.
+
+	Dot Commands:
+		.help: shows the dot commands help
+		.editor: enables editor mode, to write multiline JavaScript code with ease. Once you are in this mode, enter ctrl-D to run the code you wrote.
+		.break: when inputting a multi-line expression, entering the .break command will abort further input. Same as pressing ctrl-C.
+		.clear: resets the REPL context to an empty object and clears any multi-line expression currently being input.
+		.load: loads a JavaScript file, relative to the current working directory
+		.save: saves all you entered in the REPL session to a file (specify the filename)
+		.exit: exits the repl (same as pressing ctrl-C two times)
+
+	Argument variables in Node:
+		-Argument variables are specified as following:
+			node app.js name=lokesh age=26;
+		-Inside a node program the arguments are accessed using the argv property exposed by the process object.
+		-To see the list of argument variables:
+			process.argv.forEach(index, value){console.log(`${index} : ${value}`)}
+		-The first index is the location of node command.
+		-The second index stores the location of file.
+		-After these the argument variables are stored.
+		-To get the list of only argument variables : 
+			const args = process.argv.slice(2);
+
+OUTPUT to Command Line in NodeJS
+
+	-We can also format pretty phrases by passing variables and a format specifier.
+		%s format a variable as a string
+		%d format a variable as a number
+		%i format a variable as its integer part only
+		%o format a variable as an object
+		
+		Eg : console.log('%o', Number);\
+		console.log('My name is %s and age is %d.','Lokesh',52)
+	Counting Elements
+		-Counts the number of times a string has been consoled.		
+		-console.count('Lokesh')
+		-> arr.forEach(ele=>console.count(ele));
+		To reset counter
+			console.counterReset('string');
+
+	Printing Stack trace of a function:
+		->function trace() {console.trace()}
+
+	Count Time Spent
+		-Used to measure the time spent by function to execute.
+		- console.time(fnName) and console.timeEnd(fnName);
+			Eg:
+			const doSomething = () => console.log('test')
+			const measureDoingSomething = () => {
+			  console.time('doSomething()')
+			  //do something, and measure the time it takes
+			  doSomething()
+			  console.timeEnd('doSomething()')
+			}
+			measureDoingSomething()
+
+	stdout and stderr
+		-console method is used to print the stdout(standard output to the console.)
+		-console.error prints to the stderr stream, it will not appear in the console but will appear in the error log.
+
+	Colour the Output
+		-We can color the output of our text in the console by using escape sequences. An escape sequence is a set of characters that identifies a color.
+		-Eg : console.log('\x1b[33m%s\x1b[0m', 'hi!')
+
+		Other way of doing this by installing the Chalk library, it makes the code more readable.
+		npm install chalk
+		=> const chalk = require('chalk')
+			console.log(chalk.yellow('hi!'))
+
+Accept Input from the command line in NOdeJs
+	-Node.js since version 7 provides the readline module to perform exactly this: get input from a readable stream such as the process.stdin stream, which during the execution of a Node.js program is the terminal input, one line at a time.
+
+		const readline = require('readline').createInterface({
+			input : process.stdin,
+			output : process.stdout
+		})
+
+		readline.question('What is your name',name=>{
+			console.log(`Hi ${name}`);
+			readline.close();
+		})
+
+	-A more complete and abstract solution is provided by the Inquirer.js package.
+	-> npm install inquirer
+
+Expose functionality from a node.js file using exports.
+	-Functionalities can be imported from different files in nodejs, for importing require('') keyword is used.
+	-Two methods to export functionality.
+	1. The first is to assign an object to module.exports, which is an object provided out of the box by the module system, and this will make your file export just that object:
+		 module.exports = objToBeExported
+	2. The second way is to add the exported object as a property of exports. This way allows you to export multiple objects, functions or data:
+		car = {model : 'i10', YOP : 2008}
+		exports.car = car;
+			OR Directly
+		exports.car = {model : 'i10', YOP : 2008}
+
+Introduction to npm package manager
+
+	-npm is the standard package manager for nodejs
+	-It started as a way to download and manage dependencies of Node.js packages, but now it is used in frontend Javscript.
+	-npm manages downloads of dependencies of your project.
+	-Yarn and pnpm are alternatives to npm cli.
+
+	Installing all dependencies:
+	-npm install
+	-If a project has package.json file, npm will install all the dependencies required to run the apllication in node modeule directory, it creates the node_modules directory if it doesnot exists.
+
+	Installing Single dependencies:
+	-To install a single dependency:
+	npm install package_name
+
+	Versioning
+	-In addition to plain downloads, npm also manages versioning, so you can specify any specific version of a package, or require a version higher or lower than what you need.
+
+	Running tasks
+	-The package.json file supports a format for running command line tasks that can be run by using:
+		npm run <task-name>
+		npm run start-dev
+		npm run start 	
+		
+		package.json file
+		{
+		  "scripts": {
+		    "start-dev": "node lib/server-development",
+		    "start": "node lib/server-production"
+		  }
+		}
+
+Where does npm install the packages?
+	-There are two types of installation
+	1. Local
+	2. Global
+	-By default local installation takes place
+		Eg : npm install lodash
+			-Downloades dependencies and installs in node_modues
+			-Also adds lodash entry in dependencies property in package.json file.
+
+	-For global installation:
+		-npm install -g lodash
+
+	-To see global location on your machine
+		-npm root -g	
+
+Using/Executing a package installed by npm install 
+	-To use a package, the package needs to be imported using the require command
+	Eg : const _ = require('lodash');
+
+	-To use an executable (Eg cowsay)
+		1. Traditional method:
+			-Go to node_modules/.bin/ and ececute ./cowsay "speech"
+		2. Using npx
+			npm cowsay 'speech'
+
+package.json guide
+	-Properties of package.json file:
+		version indicates the current version
+		name sets the application/package name
+		description is a brief description of the app/package
+		main set the entry point for the application
+		private if set to true prevents the app/package to be accidentally published on npm
+		scripts defines a set of node scripts you can run
+		dependencies sets a list of npm packages installed as dependencies
+		devDependencies sets a list of npm packages installed as development dependencies
+		engines sets which versions of Node.js this package/app works on
+		browserslist is used to tell which browsers (and their versions) you want to support
+
+Find installed version of an npm package;
+	-To see list of local npm packages installed:
+		-> npm list
+	-To see list of local npm packages installed:
+		->npm list -g
+	-To see only top level packages
+		-> npm list --depth=0
+	-To see version of a specific package
+		-> npm list <package_name>
+	-To see latest available version of a package
+		-> npm view packageName version
+	-To see all versions of a package in npm registry
+		->npm view packageName versions
+
+Install older version of a package:
+	-To install a older version of package:
+		->npm install pachageName@version
+			npm install cowsay@1.2.0
+
+	-To install a global version globally
+		->npm install -g packageName@version
+
+Update all NodeJS dependencies to their latest version:
+	-Semantic Versioning (semver)
+		-1.5.0 - Major.Minor.Patch
+		-~1.5.0 - Only patch releases/updates are allowed.
+		-^1.5.0 - Minor and pathch updates are allowed.
+		- 1.5.0 - Fixed versions/ No updates.
+
+	-To update the dependencies
+		-> npm update
+	-To see list of outdated dependencies
+		-> npm outdated
+
+	-Some of the updates are major releases, and they are not updated after npm update, this is because a major release brings breaking changes.
+	-To update all the packages to a new major version install:
+		-> npm install -g npm-check-updates
+		-> ncu -u
+			-This will update all version hints in package.json file, to dependencics and dev dependecies, so that npm can install the new major version.
+		-> npm update
+
+	-If project is downloaded without node_modules
+		->npm install
+
+	
