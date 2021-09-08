@@ -240,7 +240,7 @@ Using/Executing a package installed by npm install
 		1. Traditional method:
 			-Go to node_modules/.bin/ and ececute ./cowsay "speech"
 		2. Using npx
-			npm cowsay 'speech'
+			npx cowsay 'speech'
 
 package.json guide
 	-Properties of package.json file:
@@ -299,4 +299,60 @@ Update all NodeJS dependencies to their latest version:
 	-If project is downloaded without node_modules
 		->npm install
 
+Unisntalling npm packages
+	-To uninstall a package name:
+		-> npm uninstall <package_name>
+		-> npm uninstall -S
+			OR
+		->npm uninstall --save
+			-Removes reference from package.json file.
+	-To uninstall a global package
+		-> npm uninstall -g <package_name>
 	
+Local or Global packages
+	-Packges should be installed locally, this allows us to run different projects having different versions of dependencies together.
+	-A package should be installed globally when it provides an executeable command run from the shell, and is resued across projects.
+		Eg: 	npm
+			create-react-app
+			vue-cli
+			grunt-cli
+			mocha
+			react-native-cli
+			gatsby-cli
+			forever
+			nodemon
+
+09 Sept 2021
+npm dependencies and devDependencies
+	-When you are installing a dependency using npm install it is added to dependency property of package.json
+	-When you are installing a dependency using the following commands it will be add to devDependencies property of package.json
+		 npm install -D
+			OR
+		npm install --save-dev
+	-Development Dependencies are intended only for development environment they are unneeded in production environmnet.
+	-npm install by default installs all devdependencies mentioned in package.json
+	-Use npm install --production to avoid installing development dependencies.
+
+npx - Node.JS package runner
+	-Node.js developers used to publish most of the executable commands as global packages, in order for them to be in the path and executable immediately.
+	-This was a pain because you could not really install different versions of the same command.
+	-With npx different versions of executeable commannd can be run without installing them globally.3
+	
+	Installation less command execution:
+		-you don't need to install anything
+		-you can run different versions of the same command, using the syntax @version
+			-> npx node@10 -v #v10.18.1
+			-> npx node@12 -v #v12.14.1
+
+Node.JS Event Loop
+	-The Node.js JavaScript code runs on a single thread. There is just one thing happening at a time.
+
+	-In general, in most browsers there is an event loop for every browser tab, to make every process isolated and avoid a web page with infinite loops or heavy processing to block your entire browser.
+
+
+	Blocking Event Loop
+	-Any JavaScript code that takes too long to return back control to the event loop will block the execution of any JavaScript code in the page, even block the UI thread, and the user cannot click around, scroll the page, and so on.
+	-The call stack
+		-The call stack is a LIFO (Last In, First Out) stack.
+		-The event loop continuously checks the call stack to see if there's any function that needs to run.
+
