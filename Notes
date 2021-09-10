@@ -322,7 +322,7 @@ Local or Global packages
 			forever
 			nodemon
 
-09 Sept 2021
+08 Sept 2021
 npm dependencies and devDependencies
 	-When you are installing a dependency using npm install it is added to dependency property of package.json
 	-When you are installing a dependency using the following commands it will be add to devDependencies property of package.json
@@ -347,6 +347,10 @@ npx - Node.JS package runner
 Node.JS Event Loop
 	-The Node.js JavaScript code runs on a single thread. There is just one thing happening at a time.
 
+	-It explains how Node.JS can be asyncronous having non-blocking I/O. Event loop are main reason behind the success of Node.JS
+	
+	-The Node.js code runs on a Single Thread, i.e one thing is happening at a single time.
+
 	-In general, in most browsers there is an event loop for every browser tab, to make every process isolated and avoid a web page with infinite loops or heavy processing to block your entire browser.
 
 
@@ -355,4 +359,38 @@ Node.JS Event Loop
 	-The call stack
 		-The call stack is a LIFO (Last In, First Out) stack.
 		-The event loop continuously checks the call stack to see if there's any function that needs to run.
+	
+	Queuing function execution
+		-Let's see how to defer a function until the stack is clear.
+
+		-The use case of setTimeout(() => {}, 0) is to call a function, but execute it once every other function in the code has executed.
+
+09 Sept 2021
+
+	The Message Queue
+		-When setTimeout() is called, the Browser or Node.js starts the timer. Once the timer expires, in this case immediately as we put 0 as the timeout, the callback function is put in the Message Queue.
+
+		-The loop gives priority to the call stack, and it first processes everything it finds in the call stack, and once there's nothing in there, it goes to pick up things in the message queue.
+
+	ES6 Job Queue
+		-ECMAScript 2015 introduced the concept of the Job Queue, which is used by Promises (also introduced in ES6/ES2015). It's a way to execute the result of an async function as soon as possible, rather than being put at the end of the call stack.
+	
+		-Promises that resolve before the current function ends will be executed right after the current function.
+
+		-That's a big difference between Promises (and Async/await, which is built on promises) and plain old asynchronous functions through setTimeout() or other platform APIs.
+
+
+Process.nextTick()
+	-Every time the event takes a full trip we call it a tick.
+	
+	-Whenever we pass a function to Process.nextTick(), it instructs the JS engine to execute the function immidiately after the end of current operation in the current event loop, before the next event loop tick starts.
+
+	-A function passed to process.nextTick() is going to be executed on the current iteration of the event loop,after the current operation ends.
+
+	-It is a way by which we can tell the JS engine to process a function asyncronously (after current opereation), but as soon as possible not queue it.
+
+	-Calling setTimeout((),0) will instruct the JS engine to execute the function at the end of next Tick, much later than when using nextTick() which prioritises the call and executes the function before beginning of nextTick();
+
+	-Use nextTick() when you want to make sure that in the next event loop iteration that code is already executed.
+	
 
